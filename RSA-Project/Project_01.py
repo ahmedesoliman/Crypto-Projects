@@ -1,19 +1,20 @@
 import random, math, itertools
 
-def MRT(bits):
-    """Generate random prime number with n bits."""
-    get_random_t = lambda: random.getrandbits(bits) | 1 << bits | 1
-    p = get_random_t()
-    for i in itertools.count(1):
-        if isPrime(p):
-            return p
-        else:
-            if i % (bits * 2) == 0:
-             p = get_random_t()
+# Generate random prime number with n bits.
+def MRT(bits): # bits is the number of bits in the prime number
+    get_random_t = lambda: random.getrandbits(bits) | 1 << bits | 1 # get a random number with bits length and make sure it is odd and greater than 2
+    p = get_random_t() # p is a random number with bits length and make sure it is odd and greater than 2
+    for i in itertools.count(1): # for i in count 1 to infinity
+        if isPrime(p): # if p is prime then 
+            return p # return p
+        else: 
+            if i % (bits * 2) == 0: # if i is divisible by bits*2 then 
+             p = get_random_t() # p is a random number with bits length and make sure it is odd and greater than 2
             else:
                 p += 2 # Add 2 since we are only interested in odd numbers
 
-def miillerTest(d, n):
+#imolement millerTest function to test if a number is prime or not 
+def miillerTest(d, n): # 
     # Pick a random number in [2..n-2]
     # Corner cases make sure that n > 4
     a = 2 + random.randint(1, n - 4);
@@ -79,47 +80,47 @@ def multiplicative_inverse(e, n):
         return n + x
 
     return x
-
-def power(x, m, n):
-    """Calculate x^m modulo n using O(log(m)) operations."""
-    a = 1
-    while m > 0:
-        if m % 2 == 1:
-            a = (a * x) % n
-        x = (x * x) % n
-        m //= 2
+#"""Calculate x^m modulo n using O(log(m)) operations."""
+def power(x, m, n): # x is the base , m is the exponent and n is the modulus
+    a = 1 # a is the result
+    while m > 0: # while m is greater than 0
+        if m % 2 == 1: # if m is odd
+            a = (a * x) % n # a = a*x mod n
+        x = (x * x) % n # x = x^2 mod n
+        m //= 2 # m = m/2
 
     return a
 
-def rsa_generate_key(bits):
-    p = MRT(bits // 2)
-    q = MRT(bits // 2)
+def rsa_generate_key(bits): # bits is the number of bits in the prime number
+    p = MRT(bits // 2) # p is a random prime number with bits/2 length
+    q = MRT(bits // 2) # q is a random prime number with bits/2 length
     # Ensure q != p, though for large values of bits this is
     # statistically very unlikely
-    while q == p:
-        q = MRT(bits // 2)
+    while q == p: # while q is equal to p
+        q = MRT(bits // 2) # q is a random prime number with bits/2 length
     
-    n = p * q
-    phi = (p - 1) * (q - 1)
+    n = p * q # n = p*q
+    phi = (p - 1) * (q - 1) # phi = (p-1)*(q-1)
     # Here we pick a random e, but a fixed value for e can also be used.
     while True:
-        e = random.randint(3, phi - 1)
-        if math.gcd(e, phi) == 1:
+        e = random.randint(3, phi - 1) # e is a random number between 3 and phi-1
+        if math.gcd(e, phi) == 1: # if e and phi are coprime
             break
-    d = multiplicative_inverse(e, phi)
+    d = multiplicative_inverse(e, phi) # d is the multiplicative inverse of e mod phi
     
     return (n, e, d)
 
 
-def rsa_encrypt(message, n, e):
-    return power(message, e, n)
+def rsa_encrypt(message, n, e): # message is the message to be encrypted , n is the modulus and e is the public key
+    return power(message, e, n) # return the encrypted message
 
-def rsa_decrypt(cipher, n, d):
-    return power(cipher, d, n)
+def rsa_decrypt(cipher, n, d): # cipher is the encrypted message , n is the modulus and d is the private key
+    return power(cipher, d, n) # return the decrypted message
 
-n , e , d = rsa_generate_key(1024)
+#Driver Code
+n , e , d = rsa_generate_key(1024) # n is the modulus , e is the public key and d is the private key
 
-message = 121345465
+message = 19191919
 
 print(message)
 
@@ -127,4 +128,4 @@ encrypted_message = rsa_encrypt(message,n,e)
 
 print(encrypted_message)
 
-print(rsa_decrypt(encrypted_message , n ,d)) #121345465
+print(rsa_decrypt(encrypted_message , n ,d)) #19191919
