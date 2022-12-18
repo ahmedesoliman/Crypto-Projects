@@ -20,7 +20,7 @@ def miillerTest(d, n): #
     a = 2 + random.randint(1, n - 4);
 
     # Compute a^d % n
-    x = power(a, d, n);
+    x = powmod_sm(a, d, n);
 
     if (x == 1 or x == n - 1):
         return True;
@@ -62,8 +62,9 @@ def isPrime( n, k=100):
 
     return True;
 
+# Returns pair (x, y) such that xa + yb = gcd(a, b)
 def EEA(a, b):
-    """Returns pair (x, y) such that xa + yb = gcd(a, b)"""
+
     x, lastx, y, lasty = 0, 1, 1, 0
     while b != 0:
         q, r = divmod(a, b)
@@ -73,15 +74,17 @@ def EEA(a, b):
         
     return lastx, lasty
 
+#   """Find the multiplicative inverse of e mod n."""
 def multiplicative_inverse(e, n):
-    """Find the multiplicative inverse of e mod n."""
+
     x, y = EEA(e, n)
     if x < 0:
         return n + x
 
     return x
+
 #"""Calculate x^m modulo n using O(log(m)) operations."""
-def power(x, m, n): # x is the base , m is the exponent and n is the modulus
+def powmod_sm(x, m, n): # x is the base , m is the exponent and n is the modulus
     a = 1 # a is the result
     while m > 0: # while m is greater than 0
         if m % 2 == 1: # if m is odd
@@ -112,20 +115,21 @@ def rsa_generate_key(bits): # bits is the number of bits in the prime number
 
 
 def rsa_encrypt(message, n, e): # message is the message to be encrypted , n is the modulus and e is the public key
-    return power(message, e, n) # return the encrypted message
+    return powmod_sm(message, e, n) # return the encrypted message
 
 def rsa_decrypt(cipher, n, d): # cipher is the encrypted message , n is the modulus and d is the private key
-    return power(cipher, d, n) # return the decrypted message
+    return powmod_sm(cipher, d, n) # return the decrypted message
 
 #Driver Code
 n , e , d = rsa_generate_key(1024) # n is the modulus , e is the public key and d is the private key
 
-message = 19191919
+msg = 19191919
 
-print(message)
+eMsg = rsa_encrypt(msg, n, e)
 
-encrypted_message = rsa_encrypt(message,n,e)
+print("Plain text: ", msg)
+print("Cipher Text: ", eMsg)
 
-print(encrypted_message)
+dMsg = rsa_decrypt(eMsg, n, d)
+print("Decrypted message: ", dMsg) #19191919
 
-print(rsa_decrypt(encrypted_message , n ,d)) #19191919
