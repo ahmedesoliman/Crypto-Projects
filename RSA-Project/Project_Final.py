@@ -1,9 +1,23 @@
+# @file: Project_Final.py
+# RSA Project
+# @author: ahmedesoliman
+# @breif: This is a python program that implements RSA algorithm to encrypt and decrypt messages using public and private keys
+# and also it implements the miller rabin primality test to generate prime numbers of a given bit length
+#  and also it implements the extended euclidean algorithm to calculate the multiplicative inverse of a number mod n
+#  and also it implements the powmod_sm function to calculate (base^expo) mod n
+#
+# @version: 0.1
+# @date: 12-3-2022
+# @copyright: copyright (c) 2022
+
 import random
 import math
 
 num = random.SystemRandom()  # used to generate random numbers
 
 # Generate a random prime number of a given bit length.
+
+
 def gen_prime(bits):  # bits is the number of bits in the prime number
     while True:
         # Guarantees that a is odd.
@@ -13,6 +27,8 @@ def gen_prime(bits):  # bits is the number of bits in the prime number
             return a
 
 # implement miller rabin test for primality test  # https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
+
+
 def MRT(n, a):  # n is the number to be tested and a is the random number
     exp = n - 1  # exp is n-1
     while not exp & 1:  # while exp is even
@@ -32,6 +48,8 @@ def MRT(n, a):  # n is the number to be tested and a is the random number
 
 # k is the number of times we want to run the test. The higher the value of k, the more accurate the result will be. # https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
 # n is the number to be tested and k is the number of times we want to run the test
+
+
 def miller_rabin(n, k=500):
     for i in range(k):  # for i in range k
         a = num.randrange(2, n - 1)  # a is a random number between 2 and n-1
@@ -41,12 +59,16 @@ def miller_rabin(n, k=500):
     return True
 
 # define gcd function to calculate gcd of two numbers using euclidean algorithm
+
+
 def gcd(a, b):  # a is first number and b is second number
     while b != 0:  # while b is not equal to 0
         a, b = b, a % b  # a is b and b is a%b
     return a  # return a
 
 # Returns pair (x, y) such that xa + yb = gcd(a, b) # https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+
+
 def EEA(a, b):  # a is public key and b is modulus
 
     x, lastx, y, lasty = 0, 1, 1, 0
@@ -60,6 +82,8 @@ def EEA(a, b):  # a is public key and b is modulus
     return lastx, lasty  # return lastx and lasty
 
 # Find the multiplicative inverse of e mod n. # https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+
+
 def multiplicative_inverse(e, n):  # e is public key and n is modulus
     x, y = EEA(e, n)  # x is multiplicative inverse of e mod n
     if x < 0:  # if x is negative then add n to it
@@ -67,6 +91,8 @@ def multiplicative_inverse(e, n):  # e is public key and n is modulus
     return x
 
 # implement powmod_sm function to calculate (base^expo) mod n
+
+
 def powmod_sm(base, expo, n):  # base is the base, expo is the exponent and n is the modulus
     expoBits = bin(expo)  # convert expo to binary
     value = base  # value is base
@@ -79,6 +105,8 @@ def powmod_sm(base, expo, n):  # base is the base, expo is the exponent and n is
     return value
 
 # Generate a public/private key pair. The public key is (n, e) and the private key is (n, d).
+
+
 def rsa_generate_key(bits):  # bits is the number of bits in the prime number
     p = gen_prime(bits//2)  # generate a prime number of bits length
     q = gen_prime(bits//2)  # generate a prime number of bits length
@@ -102,8 +130,11 @@ def rsa_generate_key(bits):  # bits is the number of bits in the prime number
     return (n, e, d)
 
 # message is the message to be encrypted, n is modulus and e is public key
+
+
 def rsa_encrypt(message, n, e):
     return powmod_sm(message, e, n)  # return (message^e) mod n
+
 
 def rsa_decrypt(cipher, n, d):  # cipher is the cipher text, n is modulus and d is private key
     return powmod_sm(cipher, d, n)  # return (cipher^d) mod n
