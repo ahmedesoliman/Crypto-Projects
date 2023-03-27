@@ -1,3 +1,10 @@
+# Frequency Analysis
+# @file: main.py
+# @author: ahmedesoliman
+# @breif: This is a python program that implements frequency analysis to decrypt a cipher text
+# @version: 0.1
+# @date: 12-3-2022
+# copy right: copy right (c) 2022
 
 #open text file in read mode
 text_file = open("cipherText.txt", "r")
